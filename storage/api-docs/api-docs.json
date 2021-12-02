@@ -1,0 +1,477 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "GOERS",
+        "description": "REST Api Documentation - Representational State Transfer Protocol",
+        "contact": {
+            "name": "GOERS",
+            "email": "contact@goers.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "",
+            "description": "API server"
+        }
+    ],
+    "paths": {
+        "/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get token login",
+                "description": "",
+                "operationId": "authLogin",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Login",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                }
+            }
+        },
+        "/v1/auth/me": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User login",
+                "description": "",
+                "operationId": "authMe",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/auth/change-password": {
+            "patch": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Change password user",
+                "description": "",
+                "operationId": "authChangePassword",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Login",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthChangePasswordPatchRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User logout",
+                "description": "",
+                "operationId": "authLogout",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User token refresh",
+                "description": "",
+                "operationId": "authRefreshToken",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthChangePasswordPatchRequest": {
+                "required": [
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "oldPassword": {
+                        "type": "string"
+                    },
+                    "newPassword": {
+                        "type": "string"
+                    },
+                    "newPassword_confirmation": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginRequest": {
+                "required": [
+                    "username",
+                    "password"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MessagePostRequest": {
+                "properties": {
+                    "to": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "messageKey": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "link": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PengelolaPostRequest": {
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "organisasi_id": {
+                        "type": "integer"
+                    },
+                    "jabatan_id": {
+                        "type": "integer"
+                    },
+                    "tipe_pengguna_id": {
+                        "type": "integer"
+                    },
+                    "group_jabatan_id": {
+                        "type": "integer"
+                    },
+                    "role_id": {
+                        "type": "integer"
+                    },
+                    "nama": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "nik": {
+                        "type": "string"
+                    },
+                    "nip": {
+                        "type": "string"
+                    },
+                    "telepon": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "foto": {
+                        "description": "{.jpg, .jpeg, .png} max: 512kb",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "PengelolaPutRequest": {
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "organisasi_id": {
+                        "type": "integer"
+                    },
+                    "jabatan_id": {
+                        "type": "integer"
+                    },
+                    "tipe_pengguna_id": {
+                        "type": "integer"
+                    },
+                    "group_jabatan_id": {
+                        "type": "integer"
+                    },
+                    "role_id": {
+                        "type": "integer"
+                    },
+                    "nama": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "nik": {
+                        "type": "string"
+                    },
+                    "nip": {
+                        "type": "string"
+                    },
+                    "telepon": {
+                        "type": "string"
+                    },
+                    "foto": {
+                        "description": "{.jpg, .jpeg, .png} max: 512kb",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "UserAuthPatchRequest": {
+                "required": [
+                    "username",
+                    "name",
+                    "password",
+                    "password_confirmation",
+                    "role"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "isActive": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "Successful": {
+                "description": "Successful Operation"
+            },
+            "Unauthorized": {
+                "description": "Unauthorized"
+            },
+            "Forbidden": {
+                "description": "Forbidden"
+            },
+            "NotAllowed": {
+                "description": "Method Not Allowed"
+            },
+            "BadRequest": {
+                "description": "Bad Request"
+            },
+            "Accepted": {
+                "description": "Accepted"
+            },
+            "Created": {
+                "description": "Created"
+            },
+            "Deleted": {
+                "description": "Deleted"
+            },
+            "GeneralError": {
+                "description": "General Error"
+            }
+        },
+        "parameters": {
+            "RequestedWith": {
+                "name": "X-Requested-With",
+                "in": "header",
+                "description": "Determinate as ajax request",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "default": "XMLHttpRequest",
+                    "enum": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "Pagination.Page": {
+                "name": "page",
+                "in": "query",
+                "description": "page number to display",
+                "required": false,
+                "style": "form",
+                "schema": {
+                    "type": "integer",
+                    "default": 1
+                }
+            },
+            "Pagination.Limit": {
+                "name": "limit",
+                "in": "query",
+                "description": "limit items per page",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "default": 10
+                }
+            },
+            "Sorting": {
+                "name": "sort",
+                "in": "query",
+                "description": "Sort direction",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "default": "desc",
+                    "enum": [
+                        "asc",
+                        "desc"
+                    ]
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
