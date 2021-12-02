@@ -3,19 +3,12 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BaseModel extends Model
 {
-    use SoftDeletes, EventUpdater;
-
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
+    use HasFactory, EventUpdater;
 
     /**
      * The attributes that should be mutated to dates.
@@ -29,11 +22,15 @@ class BaseModel extends Model
     ];
 
     /**
-     * Indicates if the model should be timestamped.
+     * The attributes that are mass assignable.
      *
-     * @var bool
+     * @var array
      */
-    public $timestamps = true;
+    protected $fillable = [
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
 
     /**
      * Default sort direction

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
 use App\Http\Requests\AuthChangePasswordPatchRequest;
-use App\Http\Responses\UserAuthResponse;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UserRegistrationPostRequest;
 use App\Models\User;
 use App\Repositories\Contracts\IUserAuthRepository;
 use App\Transformers\UserAuthTransformer;
 use Exception;
-use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -17,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Laravel\Lumen\Http\ResponseFactory;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -40,7 +40,7 @@ class AuthController extends Controller
      */
     public function __construct(IUserAuthRepository $repo, JWTAuth $jwt)
     {
-        $this->middleware("auth:api", ["except" => ["login"]]);
+        $this->middleware("auth:api", ["except" => ["login", "register"]]);
         $this->repo = $repo;
         $this->jwt = $jwt;
     }
@@ -81,16 +81,7 @@ class AuthController extends Controller
 
             if (!empty($user))
                 if ($jwt = $this->guard()->login($user)) {
-                    $key = config('jwt.secret');
-                    $algo = config('jwt.algo');
-
-                    $user = new UserAuthResponse($user);
-
-                    $claim = JWT::decode($jwt, $key, [$algo]);
-                    $claim->iss = config('app.url');
-                    $claim->xxx = base64_encode(json_encode($user));
-
-                    $token = JWT::encode($claim, $key, $algo);
+                    $token = $this->repo->buildToken($user, $jwt);
 
                     return $this->buildJsonResponse($this->respondWithToken($token, $user));
                 }
@@ -100,6 +91,59 @@ class AuthController extends Controller
             return $this->buildErrorResponse($exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY, $exception->errors());
         } catch (ModelNotFoundException $exception) {
             return $this->buildErrorResponse("User tidak ditemukan", Response::HTTP_NOT_FOUND);
+        } catch (Exception $exception) {
+            return $this->buildErrorResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/v1/auth/register",
+     *     operationId="storeUser",
+     *     tags={"Authentication"},
+     *     summary="Registration new user",
+     *     description="",
+     *     @OA\Parameter(ref="#/components/parameters/RequestedWith"),
+     *     @OA\RequestBody(
+     *         description="User",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/UserRegistrationPostRequest")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, ref="#/components/responses/Successful"),
+     *     @OA\Response(response=400, ref="#/components/responses/BadRequest"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/GeneralError")
+     * )
+     *
+     * @param Request $request
+     * @return JsonResponse|Response|ResponseFactory
+     */
+    public function register(Request $request)
+    {
+        try {
+            $patch = new UserRegistrationPostRequest($request->all());
+            $model = $patch->parse();
+
+            $query = $this->repo->create($model);
+
+            $user = $this->repo->authentication($request->only(['username', 'password']));
+
+            if ($jwt = $this->guard()->login($user)) {
+                $token = $this->repo->buildToken($user, $jwt);
+                $query['token'] = $token;
+
+                return $this->buildJsonResponse($query);
+            }
+
+            return response($query, Response::HTTP_CREATED);
+        } catch (ValidationException $exception) {
+            return $this->buildErrorResponse($exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY, $exception->errors());
+        } catch (HttpException $exception) {
+            return $this->buildErrorResponse($exception->getMessage(), $exception->getStatusCode());
         } catch (Exception $exception) {
             return $this->buildErrorResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -242,13 +286,6 @@ class AuthController extends Controller
             "access_token" => $token,
             "token_type" => "bearer",
             "expires_in" => $this->guard()->factory()->getTTL() * 60,
-            "data" => $user ? [
-                'id' => $user->id,
-                'nama' => $user->nama,
-                'organisasi' => $user->organisasi,
-                'jabatan' => $user->jabatan,
-                'role' => $user->role,
-            ] : null
         ];
     }
 

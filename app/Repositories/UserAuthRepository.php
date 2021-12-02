@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Http\Responses\UserAuthResponse;
 use App\Models\User;
 use App\Repositories\Contracts\IUserAuthRepository;
+use Firebase\JWT\JWT;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +26,8 @@ class UserAuthRepository extends GenericRepository implements IUserAuthRepositor
     public function authentication($model)
     {
         $user = $this->model
-            ->with(['organisasi', 'jabatan', 'role'])
+            ->query()
+            ->with(['organization', 'role'])
             ->whereUsername($model['username'])
             ->firstOrFail();
 
@@ -52,35 +55,17 @@ class UserAuthRepository extends GenericRepository implements IUserAuthRepositor
         return null;
     }
 
-    public function create($model)
+    public function buildToken($user, $jwt)
     {
-        $data = $this->model->create($model);
+        $key = config('jwt.secret');
+        $algo = config('jwt.algo');
 
-        if ($this->callback)
-            return $data->onCreated();
-        else
-            return $data;
-    }
+        $user = new UserAuthResponse($user);
 
-    public function update($username, $model)
-    {
-        $data = $this->model->whereUsername($username)->firstOrFail();
-        $data->update($model);
+        $claim = JWT::decode($jwt, $key, [$algo]);
+        $claim->iss = config('app.url');
+        $claim->xxx = base64_encode(json_encode($user));
 
-        if ($this->callback)
-            return $data->onUpdated();
-        else
-            return $data;
-    }
-
-    public function delete($username)
-    {
-        $data = $this->model->whereUsername($username)->firstOrFail();
-        $data->delete();
-
-        if ($this->callback)
-            return $data->onDeleted();
-        else
-            return $data;
+        return JWT::encode($claim, $key, $algo);
     }
 }

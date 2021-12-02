@@ -2,42 +2,22 @@
 
 namespace App\Http\Responses;
 
-use Carbon\Carbon;
-
 class RoleResponse
 {
     /**
      * @var string
      * */
-    public $permission;
+    public $id;
 
     /**
      * @var string
      * */
-    public $nama;
-
-    /**
-     * @var string
-     * */
-    public $deskripsi;
-
-    /**
-     * @var \DateTime
-     */
-    public $createdAt;
-
-    /**
-     * @var \DateTime
-     */
-    public $updatedAt;
+    public $description;
 
     public function __construct($model)
     {
-        $this->nama = $model->nama;
-        $this->permission = $model->role_permission;
-        $this->deskripsi = $model->deskripsi;
-        $this->createdAt = Carbon::parse($model->created_at);
-        $this->updatedAt = Carbon::parse($model->updated_at);
+        $this->id = $model->id;
+        $this->description = $model->description;
     }
 
     public function serialize()

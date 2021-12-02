@@ -4,7 +4,7 @@ namespace App\Http\Responses;
 
 use Carbon\Carbon;
 
-class JabatanResponse
+class UserResponse
 {
     /**
      * @var string
@@ -14,24 +14,24 @@ class JabatanResponse
     /**
      * @var string
      * */
-    public $nama;
+    public $username;
 
     /**
-     * @var \DateTime
-     */
-    public $createdAt;
+     * @var string
+     * */
+    public $email;
 
     /**
-     * @var \DateTime
-     */
-    public $updatedAt;
+     * @var string
+     * */
+    public $name;
 
     public function __construct($model)
     {
         $this->id = $model->id;
-        $this->nama = $model->nama;
-        $this->createdAt = Carbon::parse($model->created_at);
-        $this->updatedAt = Carbon::parse($model->updated_at);
+        $this->username = $model->username;
+        $this->name = $model->nama;
+        $this->email = $model->email;
     }
 
     public function serialize()

@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\BaseModel;
 use App\Repositories\Contracts\IGenericRepository;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
@@ -15,9 +14,9 @@ abstract class GenericRepository implements IGenericRepository
      */
     protected $model;
 
-    protected $callback = true;
+    protected $callback = false;
 
-    public function __construct($model, $callback = true)
+    public function __construct($model, $callback = false)
     {
         $this->model = $model;
         $this->callback = $callback;
@@ -31,18 +30,8 @@ abstract class GenericRepository implements IGenericRepository
 
         $data = $this->model->query();
 
-        if (Schema::hasColumn($table, 'id_instansi'))
-            $data->where('id_instansi', Auth::user()->id_key);
-
-        if (Schema::hasColumn($table, 'id_organisasi'))
-            $data->where('id_organisasi', Auth::user()->id_key);
-
-        if (Schema::hasColumn($table, 'id_key'))
-            $data->where('id_key', Auth::user()->id_key);
-
-        if (Auth::user()->arsip == 'N')
-            if (Schema::hasColumn($table, 'kode_organisasi'))
-                $data->where('kode_organisasi', Auth::user()->kode_organisasi);
+        if (Schema::hasColumn($table, 'organization_id'))
+            $data->where('organization_id', Auth::user()->organization_id);
 
         if (is_array($filter)) {
             $data->where(function ($q) use ($filter) {
@@ -71,8 +60,12 @@ abstract class GenericRepository implements IGenericRepository
     {
         $orderBy = $order ? $order : $this->model->getKeyName();
         $sortBy = $sort ? $sort : $this->model->getSortDirection();
+        $table = $this->model->getTable();
 
         $data = $this->model->query();
+
+        if (Schema::hasColumn($table, 'organization_id'))
+            $data->where('organization_id', Auth::user()->organization_id);
 
         if (is_array($filter)) {
             $data->where(function ($q) use ($filter) {
@@ -93,36 +86,48 @@ abstract class GenericRepository implements IGenericRepository
     public function find($id)
     {
         $data = $this->model->query();
+        $table = $this->model->getTable();
+
+        if (Schema::hasColumn($table, 'organization_id'))
+            $data->where('organization_id', Auth::user()->organization_id);
 
         return $data->findOrFail($id);
     }
 
     public function create($model)
     {
-        $data = $this->model->create($model);
+        $data = $this->model->query()->create($model);
 
-        return $data;
+        return $data->onCreated();
     }
 
     public function update($id, $model)
     {
         $data = $this->model->query();
+        $table = $this->model->getTable();
+
+        if (Schema::hasColumn($table, 'organization_id'))
+            $data->where('organization_id', Auth::user()->organization_id);
 
         $data->findOrFail($id);
 
         $data->update($model);
 
-        return $data;
+        return null;
     }
 
     public function delete($id)
     {
         $data = $this->model->query();
+        $table = $this->model->getTable();
+
+        if (Schema::hasColumn($table, 'organization_id'))
+            $data->where('organization_id', Auth::user()->organization_id);
 
         $data->findOrFail($id);
 
         $data->delete();
 
-        return $data;
+        return null;
     }
 }

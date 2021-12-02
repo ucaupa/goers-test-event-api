@@ -3,6 +3,7 @@
 namespace App\Http\Responses;
 
 use Carbon\Carbon;
+use DateTime;
 
 class UserAuthResponse
 {
@@ -19,52 +20,32 @@ class UserAuthResponse
     /**
      * @var string
      * */
-    public $groupKey;
-
-    /**
-     * @var string
-     * */
-    public $organisasiId;
-
-    /**
-     * @var string
-     * */
-    public $jabatanId;
-
-    /**
-     * @var string
-     * */
     public $email;
 
     /**
      * @var string
      * */
-    public $nama;
-
-    /**
-     * @var int
-     * */
-    public $nik;
-
-    /**
-     * @var int
-     * */
-    public $nip;
+    public $name;
 
     /**
      * @var string
      * */
-    public $telepon;
+    public $phoneNumber;
 
     /**
-     * @var OrganisasiResponse
+     * @var integer
      * */
-    public $organisasi;
+    public $organizationId;
 
     /**
-     * @var JabatanResponse
+     * @var OrganizationResponse
      * */
-    public $jabatan;
+    public $organization;
+
+    /**
+     * @var string
+     * */
+    public $roleId;
 
     /**
      * @var RoleResponse
@@ -72,12 +53,12 @@ class UserAuthResponse
     public $role;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $updatedAt;
 
@@ -85,17 +66,13 @@ class UserAuthResponse
     {
         $this->id = $model->id;
         $this->username = $model->username;
-        $this->nama = $model->nama;
+        $this->name = $model->name;
         $this->email = $model->email;
-        $this->nik = (int)$model->nik;
-        $this->nip = (int)$model->nip;
-        $this->telepon = $model->telepon;
-        $this->organisasiId = $model->organisasi_id;
-        $this->jabatanId = $model->jabatan_id;
-        $this->organisasi = $model->organisasi ? new OrganisasiResponse($model->organisasi) : null;
-        $this->jabatan = $model->jabatan ? new JabatanResponse($model->jabatan) : null;
-        $this->role = $model->role ? new RoleResponse($model->role) : null;
-        $this->groupKey = $model->group_key;
+        $this->phoneNumber = $model->phone_number;
+        $this->organizationId = $model->organization_id;
+        $this->roleId = $model->role_id;
+        $this->organization = isset($model->organization) ? new OrganizationResponse($model->organization) : null;
+        $this->role = isset($model->role) ? new RoleResponse($model->role) : null;
         $this->createdAt = Carbon::parse($model->created_at);
         $this->updatedAt = Carbon::parse($model->updated_at);
     }

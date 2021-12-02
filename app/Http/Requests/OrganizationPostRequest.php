@@ -4,28 +4,24 @@ namespace App\Http\Requests;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * @OA\Schema(
- *     schema="UserAuthPatchRequest",
- *     required={"username","name","password","password_confirmation","role"}
+ *     schema="OrganizationPostRequest",
+ *     required={"username", "password"}
  * )
  */
-class UserAuthPatchRequest
+class OrganizationPostRequest
 {
     /**
      * @OA\Property()
      * @var string
      * */
     public $name;
-
-    /**
-     * @OA\Property()
-     * @var bool
-     * */
-    public $isActive;
 
     public function __construct($payload)
     {
@@ -34,8 +30,13 @@ class UserAuthPatchRequest
         }
 
         $validator = Validator::make($payload, [
-            'name' => 'required|string',
-            'isActive' => 'required|boolean',
+            "name" => [
+                "required",
+                Rule::unique('organizations')->where(function ($query) use ($payload) {
+                    return $query->where('slug', Str::slug($payload['name'], ''));
+                })
+
+            ],
         ]);
 
         if ($validator->fails())
@@ -47,14 +48,13 @@ class UserAuthPatchRequest
     private function map($object)
     {
         $this->name = property_exists($object, 'name') ? $object->name : null;
-        $this->isActive = property_exists($object, 'isActive') ? $object->isActive ? 1 : 0 : null;
     }
 
     public function parse()
     {
         $result = array(
             'name' => $this->name,
-            'is_active' => $this->isActive,
+            'slug' => Str::slug($this->name, ''),
         );
 
         return array_filter($result, function ($value) {

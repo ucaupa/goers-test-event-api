@@ -63,6 +63,49 @@
                 }
             }
         },
+        "/v1/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Registration new user",
+                "description": "",
+                "operationId": "storeUser",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "requestBody": {
+                    "description": "User",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRegistrationPostRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                }
+            }
+        },
         "/v1/auth/me": {
             "post": {
                 "tags": [
@@ -221,6 +264,89 @@
                     }
                 ]
             }
+        },
+        "/v1/organization": {
+            "get": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "Get item of organization",
+                "description": "",
+                "operationId": "getOrganization",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "Create new organization",
+                "description": "",
+                "operationId": "storeOrganization",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Organization",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrganizationPostRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -278,109 +404,41 @@
                 },
                 "type": "object"
             },
-            "PengelolaPostRequest": {
-                "properties": {
-                    "username": {
-                        "type": "string"
-                    },
-                    "organisasi_id": {
-                        "type": "integer"
-                    },
-                    "jabatan_id": {
-                        "type": "integer"
-                    },
-                    "tipe_pengguna_id": {
-                        "type": "integer"
-                    },
-                    "group_jabatan_id": {
-                        "type": "integer"
-                    },
-                    "role_id": {
-                        "type": "integer"
-                    },
-                    "nama": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "nik": {
-                        "type": "string"
-                    },
-                    "nip": {
-                        "type": "string"
-                    },
-                    "telepon": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    },
-                    "foto": {
-                        "description": "{.jpg, .jpeg, .png} max: 512kb",
-                        "type": "string",
-                        "format": "binary"
-                    }
-                },
-                "type": "object"
-            },
-            "PengelolaPutRequest": {
-                "properties": {
-                    "username": {
-                        "type": "string"
-                    },
-                    "organisasi_id": {
-                        "type": "integer"
-                    },
-                    "jabatan_id": {
-                        "type": "integer"
-                    },
-                    "tipe_pengguna_id": {
-                        "type": "integer"
-                    },
-                    "group_jabatan_id": {
-                        "type": "integer"
-                    },
-                    "role_id": {
-                        "type": "integer"
-                    },
-                    "nama": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "nik": {
-                        "type": "string"
-                    },
-                    "nip": {
-                        "type": "string"
-                    },
-                    "telepon": {
-                        "type": "string"
-                    },
-                    "foto": {
-                        "description": "{.jpg, .jpeg, .png} max: 512kb",
-                        "type": "string",
-                        "format": "binary"
-                    }
-                },
-                "type": "object"
-            },
-            "UserAuthPatchRequest": {
+            "OrganizationPostRequest": {
                 "required": [
                     "username",
-                    "name",
-                    "password",
-                    "password_confirmation",
-                    "role"
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UserRegistrationPostRequest": {
+                "required": [
+                    "username",
+                    "password"
                 ],
                 "properties": {
                     "name": {
                         "type": "string"
                     },
-                    "isActive": {
-                        "type": "boolean"
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "password_confirmation": {
+                        "type": "string"
                     }
                 },
                 "type": "object"

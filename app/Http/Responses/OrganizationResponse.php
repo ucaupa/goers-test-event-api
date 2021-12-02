@@ -3,8 +3,9 @@
 namespace App\Http\Responses;
 
 use Carbon\Carbon;
+use App\Http\Responses\JenisOrganisasiResponse;
 
-class JenisOrganisasiResponse
+class OrganizationResponse
 {
     /**
      * @var string
@@ -14,24 +15,18 @@ class JenisOrganisasiResponse
     /**
      * @var string
      * */
-    public $nama;
+    public $name;
 
     /**
-     * @var \DateTime
-     */
-    public $createdAt;
-
-    /**
-     * @var \DateTime
-     */
-    public $updatedAt;
+     * @var string
+     * */
+    public $description;
 
     public function __construct($model)
     {
         $this->id = $model->id;
-        $this->nama = $model->nama;
-        $this->createdAt = Carbon::parse($model->created_at);
-        $this->updatedAt = Carbon::parse($model->updated_at);
+        $this->name = $model->name;
+        $this->description = $model->description;
     }
 
     public function serialize()
