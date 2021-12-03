@@ -9,6 +9,7 @@ use App\Models\EventSchedule;
 use App\Repositories\Contracts\IEventRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -88,5 +89,23 @@ class EventRepository extends GenericRepository implements IEventRepository
         ob_end_clean();
 
         return $response;
+    }
+
+    public function publish($id)
+    {
+        $data = $this->model->query()
+            ->with('tickets')
+            ->where('organization_id', Auth::user()->organization_id)
+            ->findOrFail($id);
+
+        if (count($data->tickets) <= 0)
+            throw new HttpException(Response::HTTP_OK, 'Make 1 ticket first');
+
+        if (!$data->is_draft)
+            throw new HttpException(Response::HTTP_OK, 'The event has been published');
+
+        $data->update(['is_draft' => false]);
+
+        return null;
     }
 }

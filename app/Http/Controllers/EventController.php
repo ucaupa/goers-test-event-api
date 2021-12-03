@@ -315,4 +315,51 @@ class EventController extends Controller
             return $this->buildErrorResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * @OA\Patch(
+     *     path="/v1/event/{id}/publish",
+     *     security={
+     *         {"bearerAuth": {}}
+     *     },
+     *     operationId="publishEvent",
+     *     tags={"Event"},
+     *     summary="Publish event",
+     *     description="",
+     *     @OA\Parameter(ref="#/components/parameters/RequestedWith"),
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Event ID",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(response=200, ref="#/components/responses/Successful"),
+     *     @OA\Response(response=400, ref="#/components/responses/BadRequest"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/GeneralError")
+     * )
+     *
+     * @param $id
+     * @return JsonResponse|Response|ResponseFactory
+     */
+    public function publish($id)
+    {
+        try {
+            $query = $this->repo->publish($id);
+
+            return response($query, Response::HTTP_ACCEPTED);
+        } catch (ValidationException $exception) {
+            return $this->buildErrorResponse($exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY, $exception->errors());
+        } catch (ModelNotFoundException $exception) {
+            return $this->buildErrorResponse("No query results for " . $id, Response::HTTP_NOT_FOUND);
+        } catch (HttpException $exception) {
+            return $this->buildErrorResponse($exception->getMessage(), $exception->getStatusCode());
+        } catch (Exception $exception) {
+            return $this->buildErrorResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
