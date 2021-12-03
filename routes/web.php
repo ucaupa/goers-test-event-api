@@ -36,11 +36,12 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->get('/', ['uses' => 'EventController@get']);
         $router->get('/{id}', ['uses' => 'EventController@getById']);
         $router->post('/', ['uses' => 'EventController@store']);
+        $router->patch('/{id}/publish', ['uses' => 'EventController@publish']);
         $router->patch('/{id}', ['uses' => 'EventController@update']);
         $router->delete('/{id}', ['uses' => 'EventController@destroy']);
     });
 
-    $router->group(['prefix' => 'event/{eventId}/ticket'], function () use ($router) {
+    $router->group(['prefix' => 'event/{eventId}/ticket', 'middleware' => ['auth:api', 'has_organization', 'roles:admin-organization']], function () use ($router) {
         $router->get('/', ['uses' => 'EventTicketController@get']);
         $router->get('/{id}', ['uses' => 'EventTicketController@getById']);
         $router->post('/', ['uses' => 'EventTicketController@store']);
@@ -49,4 +50,14 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
     });
 
     $router->get('/assets/image/event/{file:[a-zA-Z0-9-_]+}[{extension:\.[a-z]+}]', ['uses' => 'EventController@file']);
+});
+
+$router->group(['prefix' => 'v2', 'namespace' => 'V2'], function () use ($router) {
+    $router->group(['prefix' => 'event'], function () use ($router) {
+        $router->get('/', ['uses' => 'PublicEventController@get']);
+        $router->get('/{slugId}', ['uses' => 'PublicEventController@getById']);
+        $router->post('/', ['uses' => 'PublicEventController@store']);
+        $router->patch('/{slugId}', ['uses' => 'PublicEventController@update']);
+        $router->delete('/{slugId}', ['uses' => 'PublicEventController@destroy']);
+    });
 });

@@ -545,6 +545,52 @@
                 ]
             }
         },
+        "/v1/event/{id}/publish": {
+            "patch": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Publish event",
+                "description": "",
+                "operationId": "publishEvent",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/v1/event/{eventId}/ticket": {
             "get": {
                 "tags": [
@@ -944,6 +990,130 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/v2/event": {
+            "get": {
+                "tags": [
+                    "Public - Event"
+                ],
+                "summary": "Get list of event with pagination",
+                "description": "",
+                "operationId": "getEventListMeta",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Pagination.Page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Pagination.Limit"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Ordered column",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "name"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "Includes relationship",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "schedules,images,tickets.sessions.schedule",
+                                "schedules",
+                                "images",
+                                "tickets.sessions.schedule"
+                            ]
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/Sorting"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                }
+            }
+        },
+        "/v2/event/{slugId}": {
+            "get": {
+                "tags": [
+                    "Public - Event"
+                ],
+                "summary": "Get item of event",
+                "description": "",
+                "operationId": "getEvent",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "slugId",
+                        "in": "path",
+                        "description": "Event Slug ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "Includes relationship",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "schedules,images,tickets.sessions.schedule",
+                                "schedules",
+                                "images",
+                                "tickets.sessions.schedule"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                }
             }
         }
     },

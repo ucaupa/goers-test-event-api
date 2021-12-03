@@ -2,12 +2,19 @@
 
 namespace App\Http\Responses;
 
+use Illuminate\Support\Str;
+
 class EventResponse
 {
     /**
      * @var string
      * */
     public $id;
+
+    /**
+     * @var string
+     * */
+    public $slugId;
 
     /**
      * @var string
@@ -42,6 +49,7 @@ class EventResponse
     public function __construct($model)
     {
         $this->id = $model->id;
+        $this->slugId = Str::slug($model->name) . '--' . $model->id;
         $this->name = $model->name;
         $this->description = $model->description;
         $this->organizationId = (int)$model->organization_id;

@@ -1,0 +1,18 @@
+{
+    "payment_type": "bank_transfer",
+    "transaction_details": {
+        "gross_amount": "${{order_amount}}",
+        "order_id": "${{order_id}}"
+    },
+    "customer_details": {
+        "email": "${{email}}",
+        "first_name": "${{first_name}}",
+        "last_name": "${{last_name}}",
+        "phone": "${{phone}}"
+    },
+    "item_details": "${{item_details}}",
+    "bank_transfer": {
+        "bank": "bri",
+        "va_number": "111111"
+    }
+}

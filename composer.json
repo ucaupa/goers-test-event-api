@@ -18,7 +18,8 @@
         "midtrans/midtrans-php": "^2.5",
         "tymon/jwt-auth": "^1.0",
         "ext-curl": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-mcrypt": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

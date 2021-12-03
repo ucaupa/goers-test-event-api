@@ -1,0 +1,12 @@
+{
+    "payment_type": "echannel",
+    "transaction_details": {
+        "order_id": "${{order_id}}",
+        "gross_amount": "${{order_amount}}"
+    },
+    "item_details": "${{item_details}}",
+    "echannel": {
+        "bill_info1": "Payment For: ${{full_name}}",
+        "bill_info2": "debt"
+    }
+}
