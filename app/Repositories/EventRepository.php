@@ -41,7 +41,6 @@ class EventRepository extends GenericRepository implements IEventRepository
             unset($model['schedule']);
             unset($model['image']);
 
-            $model['is_draft'] = false;
             $data = $this->model->query()->create($model);
 
             foreach ($schedules as $schedule) {

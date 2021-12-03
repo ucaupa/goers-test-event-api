@@ -22,5 +22,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('App\Repositories\Contracts\IUserRepository', 'App\Repositories\UserRepository', true);
         $this->app->bind('App\Repositories\Contracts\IOrganizationRepository', 'App\Repositories\OrganizationRepository', true);
         $this->app->bind('App\Repositories\Contracts\IEventRepository', 'App\Repositories\EventRepository', true);
+        $this->app->bind('App\Repositories\Contracts\IEventTicketRepository', 'App\Repositories\EventTicketRepository', true);
     }
 }

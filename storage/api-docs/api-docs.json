@@ -303,10 +303,10 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "schedules,images,tickets",
+                                "schedules,images,tickets.sessions.schedule",
                                 "schedules",
                                 "images",
-                                "tickets"
+                                "tickets.sessions.schedule"
                             ]
                         }
                     },
@@ -413,10 +413,10 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "schedules,images,tickets",
+                                "schedules,images,tickets.sessions.schedule",
                                 "schedules",
                                 "images",
-                                "tickets"
+                                "tickets.sessions.schedule"
                             ]
                         }
                     }
@@ -516,6 +516,325 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/EventPatchRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "deprecated": true,
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/event/{eventId}/ticket": {
+            "get": {
+                "tags": [
+                    "Ticket Event"
+                ],
+                "summary": "Get list of event with pagination",
+                "description": "",
+                "operationId": "getEventTicketListMeta",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/Pagination.Page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Pagination.Limit"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Ordered column",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "name"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "Includes relationship",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "sessions.schedule"
+                            ]
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/Sorting"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Ticket Event"
+                ],
+                "summary": "Create new event",
+                "description": "",
+                "operationId": "storeEventTicket",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "EventTicket",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventTicketPostRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/event/{eventId}/ticket/{id}": {
+            "get": {
+                "tags": [
+                    "Ticket Event"
+                ],
+                "summary": "Get item of event",
+                "description": "",
+                "operationId": "getEventTicket",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event Ticket ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "Includes relationship",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "sessions.schedule"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Ticket Event"
+                ],
+                "summary": "Delete event",
+                "description": "",
+                "operationId": "deleteEventTicket",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event Ticket ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Ticket Event"
+                ],
+                "summary": "Update event",
+                "description": "",
+                "operationId": "updateEventTicket",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event Ticket ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "EventTicket",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventTicketPatchRequest"
                             }
                         }
                     }
@@ -723,6 +1042,76 @@
                     "endDate": {
                         "type": "string",
                         "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "EventTicketPatchRequest": {
+                "required": [
+                    "name",
+                    "quota",
+                    "startSale",
+                    "endSale",
+                    "session"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "integer"
+                    },
+                    "quota": {
+                        "type": "integer"
+                    },
+                    "startSale": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "endSale": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "session": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "EventTicketPostRequest": {
+                "required": [
+                    "name",
+                    "quota",
+                    "startSale",
+                    "endSale",
+                    "session"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "integer"
+                    },
+                    "quota": {
+                        "type": "integer"
+                    },
+                    "startSale": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "endSale": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "session": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     }
                 },
                 "type": "object"

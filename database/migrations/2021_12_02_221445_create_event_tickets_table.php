@@ -16,7 +16,6 @@ class CreateEventTicketsTable extends Migration
         Schema::create('event_tickets', function (Blueprint $table) {
             $table->id();
             $table->integer('event_id')->unsigned()->index();
-            $table->integer('event_schedule_id')->unsigned()->index();
             $table->string('name');
             $table->string('price')->nullable();
             $table->integer('quota');
@@ -28,7 +27,6 @@ class CreateEventTicketsTable extends Migration
             $table->timestamps();
 
             $table->foreign('event_id')->references('id')->on('events')->cascadeOnDelete();
-            $table->foreign('event_schedule_id')->references('id')->on('event_schedules')->cascadeOnDelete();
         });
     }
 

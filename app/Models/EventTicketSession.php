@@ -18,5 +18,11 @@ class EventTicketSession extends BaseModel
      */
     protected $fillable = [
         'event_ticket_id',
+        'event_schedule_id',
     ];
+
+    public function schedule()
+    {
+        return $this->belongsTo(EventSchedule::class, 'event_schedule_id', 'id');
+    }
 }

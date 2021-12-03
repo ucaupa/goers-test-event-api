@@ -40,5 +40,13 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
         $router->delete('/{id}', ['uses' => 'EventController@destroy']);
     });
 
+    $router->group(['prefix' => 'event/{eventId}/ticket'], function () use ($router) {
+        $router->get('/', ['uses' => 'EventTicketController@get']);
+        $router->get('/{id}', ['uses' => 'EventTicketController@getById']);
+        $router->post('/', ['uses' => 'EventTicketController@store']);
+        $router->patch('/{id}', ['uses' => 'EventTicketController@update']);
+        $router->delete('/{id}', ['uses' => 'EventTicketController@destroy']);
+    });
+
     $router->get('/assets/image/event/{file:[a-zA-Z0-9-_]+}[{extension:\.[a-z]+}]', ['uses' => 'EventController@file']);
 });

@@ -18,11 +18,15 @@ class EventTicket extends BaseModel
      */
     protected $fillable = [
         'event_id',
-        'event_schedule_id',
         'name',
         'price',
         'quota',
         'start_sale_date',
         'end_sale_date',
     ];
+
+    public function sessions()
+    {
+        return $this->hasMany(EventTicketSession::class, '', 'id');
+    }
 }
