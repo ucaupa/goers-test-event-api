@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class RoleCheck
+class HasOrganization
 {
     /**
      * The authentication guard factory instance.
@@ -32,21 +32,18 @@ class RoleCheck
      *
      * @param Request $request
      * @param Closure $next
-     * @param array|null $roles
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$roles)
+    public function handle($request, Closure $next)
     {
         $user = $this->auth->user();
 
-        if (!isset($user->role))
-            return response('Unauthorized.', Response::HTTP_UNAUTHORIZED);
+        if (!isset($user->organization_id))
+            return response([
+                'message' => 'Create an organization first',
+                'errors' => null
+            ], Response::HTTP_FORBIDDEN);
 
-        foreach ($roles as $role) {
-            if ($role == strtolower($user->role_id))
-                return $next($request);
-        }
-
-        return response('Forbidden.', Response::HTTP_FORBIDDEN);
+        return $next($request);
     }
 }

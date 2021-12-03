@@ -32,7 +32,9 @@ class OrganizationRepository extends GenericRepository implements IOrganizationR
 
         $data = $this->model->query()->create($model);
 
-        $this->modelUser->query()->where('id', Auth::user()->id)->update(['organization_id' => $data->id]);
+        $this->modelUser->query()
+            ->where('id', Auth::user()->id)
+            ->update(['organization_id' => $data->id, 'role_id' => 'admin-organization']);
 
         return $data->onCreated();
     }

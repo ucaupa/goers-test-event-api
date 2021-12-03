@@ -265,6 +265,285 @@
                 ]
             }
         },
+        "/v1/event": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get list of event with pagination",
+                "description": "",
+                "operationId": "getEventListMeta",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Pagination.Page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Pagination.Limit"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Ordered column",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "name"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "Includes relationship",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "schedules,images,tickets",
+                                "schedules",
+                                "images",
+                                "tickets"
+                            ]
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/Sorting"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Create new event",
+                "description": "",
+                "operationId": "storeEvent",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Event",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventPostRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/event/{id}": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get item of event",
+                "description": "",
+                "operationId": "getEvent",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "Includes relationship",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "schedules,images,tickets",
+                                "schedules",
+                                "images",
+                                "tickets"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Delete event",
+                "description": "",
+                "operationId": "deleteEvent",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Update event",
+                "description": "",
+                "operationId": "updateEvent",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Event",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventPatchRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/v1/organization": {
             "get": {
                 "tags": [
@@ -365,6 +644,85 @@
                     },
                     "newPassword_confirmation": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "EventImagePostRequest": {
+                "properties": {
+                    "file": {
+                        "description": "{.image format} max: 2Mb",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "EventPatchRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "categoryId": {
+                        "type": "integer"
+                    },
+                    "location": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "EventPostRequest": {
+                "required": [
+                    "name",
+                    "description",
+                    "categoryId",
+                    "location",
+                    "schedule",
+                    "image"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "categoryId": {
+                        "type": "integer"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "schedule": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventSchedulePostRequest"
+                        }
+                    },
+                    "image": {
+                        "description": "{.image format} max: 1Mb",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "binary"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "EventSchedulePostRequest": {
+                "properties": {
+                    "startDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 },
                 "type": "object"

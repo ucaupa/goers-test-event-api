@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\OrganizationPatchRequest;
 use App\Http\Requests\OrganizationPostRequest;
 use App\Repositories\Contracts\IOrganizationRepository;
 use App\Transformers\OrganizationTransformer;

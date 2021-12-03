@@ -81,6 +81,7 @@ collect(scandir(__DIR__ . '/../config'))->each(function ($item) use ($app) {
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
     'roles' => App\Http\Middleware\RoleCheck::class,
+    'has_organization' => App\Http\Middleware\HasOrganization::class,
 ]);
 
 /*

@@ -20,13 +20,11 @@ class CreateEventsTable extends Migration
             $table->string('description');
             $table->integer('category_id')->unsigned();
             $table->string('location');
-            $table->boolean('is_live');
+            $table->boolean('is_draft')->default(true);
 
             $table->string('created_by');
             $table->string('updated_by')->nullable();
-            $table->string('deleted_by')->nullable();
             $table->timestamps();
-            $table->softDeletes('deleted_at');
 
             $table->foreign('organization_id')->references('id')->on('organizations');
             $table->foreign('category_id')->references('id')->on('event_categories');

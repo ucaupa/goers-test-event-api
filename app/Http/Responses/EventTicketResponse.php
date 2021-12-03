@@ -2,7 +2,7 @@
 
 namespace App\Http\Responses;
 
-class OrganizationResponse
+class EventTicketResponse
 {
     /**
      * @var string
@@ -10,20 +10,14 @@ class OrganizationResponse
     public $id;
 
     /**
-     * @var string
+     * @var int
      * */
-    public $name;
-
-    /**
-     * @var string
-     * */
-    public $description;
+    public $eventId;
 
     public function __construct($model)
     {
         $this->id = $model->id;
-        $this->name = $model->name;
-        $this->description = $model->description;
+        $this->eventId = $model->name;
     }
 
     public function serialize()
