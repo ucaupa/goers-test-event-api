@@ -1,18 +1,19 @@
 {
+    "status_code": "201",
+    "status_message": "Success, Bank Transfer transaction is created",
+    "transaction_id": "00bf717a-2495-451b-9504-14d0b69e2d3e",
+    "order_id": "d3e9a512-e05d-45d1-8b97-c86e2ee0d072",
+    "merchant_id": "G548816600",
+    "gross_amount": "250000.00",
+    "currency": "IDR",
     "payment_type": "bank_transfer",
-    "transaction_details": {
-        "gross_amount": "${{order_amount}}",
-        "order_id": "${{order_id}}"
-    },
-    "customer_details": {
-        "email": "${{email}}",
-        "first_name": "${{first_name}}",
-        "last_name": "${{last_name}}",
-        "phone": "${{phone}}"
-    },
-    "item_details": "${{item_details}}",
-    "bank_transfer": {
-        "bank": "bca",
-        "va_number": "111111"
-    }
+    "transaction_time": "2021-12-04 08:34:09",
+    "transaction_status": "pending",
+    "va_numbers": [
+        {
+            "bank": "bca",
+            "va_number": "16600111111"
+        }
+    ],
+    "fraud_status": "accept"
 }

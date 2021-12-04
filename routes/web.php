@@ -56,8 +56,12 @@ $router->group(['prefix' => 'v2', 'namespace' => 'V2'], function () use ($router
     $router->group(['prefix' => 'event'], function () use ($router) {
         $router->get('/', ['uses' => 'PublicEventController@get']);
         $router->get('/{slugId}', ['uses' => 'PublicEventController@getById']);
-        $router->post('/', ['uses' => 'PublicEventController@store']);
-        $router->patch('/{slugId}', ['uses' => 'PublicEventController@update']);
-        $router->delete('/{slugId}', ['uses' => 'PublicEventController@destroy']);
+    });
+
+    $router->group(['prefix' => 'transaction'], function () use ($router) {
+        $router->get('/{id}', ['uses' => 'TransactionController@get']);
+        $router->post('/checkout', ['uses' => 'TransactionController@checkout']);
+        $router->post('/pay', ['uses' => 'TransactionController@pay']);
+        $router->post('/callback', ['uses' => 'TransactionController@callback']);
     });
 });

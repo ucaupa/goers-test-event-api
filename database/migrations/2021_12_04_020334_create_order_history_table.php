@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+class CreateOrderHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,19 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('order_history', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice')->nullable();
-            $table->string('order_id')->unique();
+            $table->string('order_id')->unsigned()->nullable();
             $table->string('transaction_id')->nullable();
             $table->integer('payment_method_id')->unsigned()->nullable();
-            $table->enum('status', ['WAITING', 'PENDING', 'CANCEL', 'SUCCESS'])->default('WAITING');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email');
-            $table->string('phone_number');
-            $table->string('gender');
+            $table->string('status');
             $table->text('data')->nullable();
 
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();
 
-            $table->foreign('payment_method_id')->references('id')->on('payment_method');
+            $table->foreign('order_id')->references('order_id')->on('orders')->cascadeOnDelete();
         });
     }
 
@@ -42,6 +36,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order');
+        Schema::dropIfExists('order_history');
     }
 }

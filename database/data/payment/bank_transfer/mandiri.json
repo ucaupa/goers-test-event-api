@@ -4,6 +4,12 @@
         "order_id": "${{order_id}}",
         "gross_amount": "${{order_amount}}"
     },
+    "customer_details": {
+        "email": "${{email}}",
+        "first_name": "${{first_name}}",
+        "last_name": "${{last_name}}",
+        "phone": "${{phone}}"
+    },
     "item_details": "${{item_details}}",
     "echannel": {
         "bill_info1": "Payment For: ${{full_name}}",

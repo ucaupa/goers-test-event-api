@@ -1115,6 +1115,166 @@
                     }
                 }
             }
+        },
+        "/v2/transaction/{id}": {
+            "get": {
+                "tags": [
+                    "Public - Transaction"
+                ],
+                "summary": "Get item of transaction",
+                "description": "",
+                "operationId": "getTransaction",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                }
+            }
+        },
+        "/v2/transaction/checkout": {
+            "post": {
+                "tags": [
+                    "Public - Transaction"
+                ],
+                "summary": "Checkout tickets",
+                "description": "",
+                "operationId": "checkoutTicket",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Event",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CheckoutRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                }
+            }
+        },
+        "/v2/transaction/pay": {
+            "post": {
+                "tags": [
+                    "Public - Transaction"
+                ],
+                "summary": "Pay order",
+                "description": "",
+                "operationId": "payOrder",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Event",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PayRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                }
+            }
+        },
+        "/v2/transaction/callback": {
+            "post": {
+                "tags": [
+                    "Public - Transaction"
+                ],
+                "summary": "Callback notification order from midtrans",
+                "description": "",
+                "operationId": "callbackOrder",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RequestedWith"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Successful"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/GeneralError"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1133,6 +1293,54 @@
                     },
                     "newPassword_confirmation": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CheckoutPersonRequest": {
+                "properties": {
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CheckoutRequest": {
+                "properties": {
+                    "eventId": {
+                        "type": "integer"
+                    },
+                    "person": {
+                        "$ref": "#/components/schemas/CheckoutPersonRequest"
+                    },
+                    "tickets": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CheckoutTicketRequest"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CheckoutTicketRequest": {
+                "properties": {
+                    "ticketId": {
+                        "type": "integer"
+                    },
+                    "qty": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"
@@ -1329,6 +1537,17 @@
                 "properties": {
                     "name": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PayRequest": {
+                "properties": {
+                    "orderId": {
+                        "type": "string"
+                    },
+                    "paymentMethodId": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"
